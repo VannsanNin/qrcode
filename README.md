@@ -24,10 +24,8 @@ A web-based application to mark attendance using QR codes. Participants scan a Q
 
 ## Technology Stack
 
-- **Frontend:** HTML, CSS, JavaScript
-- **Backend:** Node.js / Express (or specify your backend)
-- **Database:** MongoDB / MySQL / SQLite (specify your database)
-- **QR Code Library:** `qrcode` (Node.js) or `qrcode.js` (frontend)
+- **Frontend:** React + Vite, Tailwind css
+- **QR Code Library:** `qrcode.react` (frontend)
 
 ---
 
