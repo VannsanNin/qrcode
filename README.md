@@ -1,12 +1,41 @@
-# React + Vite
+# QR Code Attendance System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based application to mark attendance using QR codes. Participants scan a QR code with their device to automatically register their attendance. Built for classrooms, events, or meetings, this system simplifies attendance tracking and reduces manual errors.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Generate unique QR codes for events or sessions.
+- Real-time attendance tracking.
+- Web-based interface for easy access from any device.
+- Optional export of attendance data to CSV.
+- User-friendly and responsive design.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Demo
+
+![Demo Screenshot](https://res.cloudinary.com/ddn4m7h23/image/upload/v1755253703/Screenshot_2025-08-15_172734_dinw9g.png)
+
+[![Open Demo](https://img.shields.io/badge/Open%20Demo-Visit-blue?style=for-the-badge)](https://qrcode-kh.vercel.app/)
+
+---
+
+## Technology Stack
+
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** Node.js / Express (or specify your backend)
+- **Database:** MongoDB / MySQL / SQLite (specify your database)
+- **QR Code Library:** `qrcode` (Node.js) or `qrcode.js` (frontend)
+
+---
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/qr-attendance.git
+cd qrcode
+```
