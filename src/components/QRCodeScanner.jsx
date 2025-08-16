@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Camera, Square, CheckCircle, XCircle } from "lucide-react";
+import { Camera, Square, CheckCircle, XCircle, RotateCcw } from "lucide-react";
 
 const QRCodeScanner = () => {
   const [isScanning, setIsScanning] = useState(false);
@@ -7,6 +7,7 @@ const QRCodeScanner = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [debugInfo, setDebugInfo] = useState("");
+  const [facingMode, setFacingMode] = useState("environment"); // "environment" = back, "user" = front
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
@@ -95,11 +96,15 @@ const QRCodeScanner = () => {
         /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent
         );
-      setDebugInfo(`Device: ${isMobile ? "Mobile" : "Desktop"}`);
+      setDebugInfo(
+        `Device: ${isMobile ? "Mobile" : "Desktop"} | Camera: ${
+          facingMode === "environment" ? "Back" : "Front"
+        }`
+      );
 
       const constraints = {
         video: {
-          facingMode: "environment", // Use back camera if available
+          facingMode: facingMode, // Use selected camera
           width: { ideal: isMobile ? 640 : 1280 },
           height: { ideal: isMobile ? 480 : 720 },
           frameRate: { ideal: 30, max: 30 },
@@ -124,7 +129,11 @@ const QRCodeScanner = () => {
 
       setIsScanning(true);
       setIsLoading(false);
-      setDebugInfo("Camera ready! Point at QR code...");
+      setDebugInfo(
+        `Camera ready! Using ${
+          facingMode === "environment" ? "back" : "front"
+        } camera`
+      );
 
       // Start scanning for QR codes
       scanIntervalRef.current = setInterval(detectQRCode, 500);
@@ -181,6 +190,20 @@ const QRCodeScanner = () => {
     }
   };
 
+  const switchCamera = async () => {
+    const newFacingMode = facingMode === "environment" ? "user" : "environment";
+    setFacingMode(newFacingMode);
+
+    if (isScanning) {
+      // If currently scanning, restart with new camera
+      stopScanning();
+      // Small delay to ensure camera is properly released
+      setTimeout(() => {
+        startScanning();
+      }, 100);
+    }
+  };
+
   const resetScanner = () => {
     setScannedData("");
     setError("");
@@ -201,6 +224,20 @@ const QRCodeScanner = () => {
         <p className="text-gray-600">Point your camera at a QR code to scan</p>
       </div>
 
+      {/* Camera selection */}
+      <div className="mb-4 text-center">
+        <button
+          onClick={switchCamera}
+          className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center mx-auto"
+          disabled={isLoading}
+        >
+          <RotateCcw className="mr-2" size={16} />
+          {facingMode === "environment"
+            ? "Switch to Front Camera"
+            : "Switch to Back Camera"}
+        </button>
+      </div>
+
       {!isScanning && !scannedData && !error && !isLoading && (
         <div className="text-center">
           <button
@@ -210,6 +247,9 @@ const QRCodeScanner = () => {
             <Camera className="mr-2" size={20} />
             Start Scanning
           </button>
+          <p className="text-xs text-gray-500 mt-2">
+            Using {facingMode === "environment" ? "back" : "front"} camera
+          </p>
         </div>
       )}
 
@@ -241,6 +281,13 @@ const QRCodeScanner = () => {
           </div>
 
           <div className="flex justify-center space-x-3">
+            <button
+              onClick={switchCamera}
+              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded font-semibold transition-colors flex items-center"
+            >
+              <RotateCcw className="mr-2" size={16} />
+              Switch
+            </button>
             <button
               onClick={stopScanning}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold transition-colors flex items-center"
@@ -311,6 +358,7 @@ const QRCodeScanner = () => {
                 <li>Try refreshing the page</li>
                 <li>Use Chrome or Firefox browser</li>
                 <li>Check if your device has a camera</li>
+                <li>Try switching between front and back camera</li>
               </ul>
             </details>
           </div>
@@ -320,6 +368,7 @@ const QRCodeScanner = () => {
       <div className="mt-6 text-xs text-gray-500 text-center space-y-1">
         <p>📱 Works on Android Chrome, Firefox, Samsung Internet</p>
         <p>🎯 Point camera at QR code and hold steady</p>
+        <p>🔄 Use camera switch button to toggle front/back</p>
         <p>💡 For production: integrate jsQR library for better detection</p>
       </div>
     </div>
